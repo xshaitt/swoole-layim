@@ -14,7 +14,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    protected $namespace = 'App\Http\Controllers';
+    protected $namespace = 'App\Http';
 
     /**
      * Define your route model bindings, pattern filters, etc.
@@ -35,9 +35,11 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map()
     {
-        $this->mapApiRoutes();
-
-        $this->mapWebRoutes();
+//        $this->mapApiRoutes();
+//
+//        $this->mapWebRoutes();
+        $this->mapFrontendRoutes();
+        $this->mapBackendRoutes();
 
         //
     }
@@ -52,8 +54,8 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapWebRoutes()
     {
         Route::middleware('web')
-             ->namespace($this->namespace)
-             ->group(base_path('routes/web.php'));
+            ->namespace($this->namespace)
+            ->group(base_path('routes/web.php'));
     }
 
     /**
@@ -66,8 +68,27 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapApiRoutes()
     {
         Route::prefix('api')
-             ->middleware('api')
-             ->namespace($this->namespace)
-             ->group(base_path('routes/api.php'));
+            ->middleware('api')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/api.php'));
+    }
+
+    /**
+     * 前台路由
+     */
+    protected function mapFrontendRoutes()
+    {
+        Route::prefix('api')
+            ->namespace($this->namespace . '\Frontend\Controllers')
+            ->group(base_path('routes/frontend.php'));
+    }
+
+    /**
+     * 后台路由
+     */
+    protected function mapBackendRoutes()
+    {
+        Route::namespace($this->namespace . '\Backend\Controllers')
+            ->group(base_path('routes/backend.php'));
     }
 }
