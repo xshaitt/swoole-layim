@@ -9,6 +9,6 @@ class TestController extends Controller
 {
     public function test()
     {
-        return view('frontend.welcome');
+        return view('frontend/welcome');
     }
 }

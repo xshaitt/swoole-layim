@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Http\Swoole\SwooleWebsocket;
 use Illuminate\Console\Command;
 
 class SwooleStart extends Command
@@ -18,7 +19,7 @@ class SwooleStart extends Command
      *
      * @var string
      */
-    protected $description = 'Swoole处理';
+    protected $description = '启动Swoole';
 
     /**
      * Create a new command instance.
@@ -37,7 +38,6 @@ class SwooleStart extends Command
      */
     public function handle()
     {
-        echo 'xshait
-';
+        SwooleWebsocket::start();
     }
 }
