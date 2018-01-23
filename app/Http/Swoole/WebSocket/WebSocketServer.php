@@ -35,8 +35,9 @@
  *                  每晚灯火阑珊处，夜难寐，加班狂。
  */
 
-namespace App\Http\Swoole;
-class SwooleWebsocket
+namespace App\Http\Swoole\WebSocket;
+
+class WebSocketServer
 {
     public static $server;
 
@@ -44,7 +45,7 @@ class SwooleWebsocket
     {
         self::$server = new \swoole_websocket_server("0.0.0.0", 9501);
         self::$server->on('open', function (\swoole_websocket_server $server, $request) {
-            echo "server: handshake success with fd{$request->fd}\n";
+            $server->push($request->fd, "建立链接");
         });
         self::$server->on('message', function (\swoole_websocket_server $server, $frame) {
             echo "receive from {$frame->fd}:{$frame->data},opcode:{$frame->opcode},fin:{$frame->finish}\n";

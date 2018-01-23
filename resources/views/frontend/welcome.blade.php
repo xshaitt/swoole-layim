@@ -48,120 +48,75 @@
     <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
 </head>
 <body>
-
-<table class="layui-hide" id="demo"></table>
+<h1>最近交易记录</h1>
+<table class="layui-table">
+    <colgroup>
+        <col width="150">
+        <col width="200">
+        <col>
+    </colgroup>
+    <thead>
+    <tr>
+        <th>时间</th>
+        <th>买/卖</th>
+        <th>价格</th>
+        <th>数量</th>
+        <th>合计</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>2018-1-23 11:22:22</td>
+        <td>买</td>
+        <td>1600</td>
+        <td>2</td>
+        <td>3200</td>
+    </tr>
+    <tr>
+        <td>2018-1-23 10:22:22</td>
+        <td>卖</td>
+        <td>1600</td>
+        <td>2</td>
+        <td>3200</td>
+    </tr>
+    </tbody>
+</table>
 
 
 <script src="{{asset('/layui/layui.js')}}" charset="utf-8"></script>
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 <script type="text/javascript">
-    function WebSocketTest()
-    {
-        if ("WebSocket" in window)
-        {
+    function WebSocketTest() {
+        if ("WebSocket" in window) {
             alert("您的浏览器支持 WebSocket!");
 
             // 打开一个 web socket
             var ws = new WebSocket("ws://0.0.0.0:9501");
 
-            ws.onopen = function()
-            {
+            ws.onopen = function () {
                 // Web Socket 已连接上，使用 send() 方法发送数据
                 ws.send("发送数据");
-                alert("数据发送中...");
+                console.log('发送数据');
             };
 
-            ws.onmessage = function (evt)
-            {
+            ws.onmessage = function (evt) {
                 var received_msg = evt.data;
-                alert("数据已接收...");
+                console.log(received_msg);
             };
 
-            ws.onclose = function()
-            {
+            ws.onclose = function () {
                 // 关闭 websocket
-                alert("连接已关闭...");
+                console.log('链接关闭')
             };
         }
 
-        else
-        {
+        else {
             // 浏览器不支持 WebSocket
             alert("您的浏览器不支持 WebSocket!");
         }
     }
-</script>
-<script>
-    var test;
-    layui.use('table', function(){
-        var table = layui.table;
-        test = table;
-        //展示已知数据
-        table.render({
-            elem: '#demo'
-            ,cols: [[ //标题栏
-                {field: 'id', title: 'ID', width: 80, sort: true}
-                ,{field: 'username', title: '用户名', width: 120}
-                ,{field: 'email', title: '邮箱', minWidth: 150}
-                ,{field: 'sign', title: '签名', minWidth: 160}
-                ,{field: 'sex', title: '性别', width: 80}
-                ,{field: 'city', title: '城市', width: 100}
-                ,{field: 'experience', title: '积分', width: 80, sort: true}
-            ]]
-            ,data: [{
-                "id": "10001"
-                ,"username": "杜甫"
-                ,"email": "xianxin@layui.com"
-                ,"sex": "男"
-                ,"city": "浙江杭州"
-                ,"sign": "人生恰似一场修行"
-                ,"experience": "116"
-                ,"ip": "192.168.0.8"
-                ,"logins": "108"
-                ,"joinTime": "2016-10-14"
-            }, {
-                "id": "10002"
-                ,"username": "李白"
-                ,"email": "xianxin@layui.com"
-                ,"sex": "男"
-                ,"city": "浙江杭州"
-                ,"sign": "人生恰似一场修行"
-                ,"experience": "12"
-                ,"ip": "192.168.0.8"
-                ,"logins": "106"
-                ,"joinTime": "2016-10-14"
-                ,"LAY_CHECKED": true
-            }, {
-                "id": "10003"
-                ,"username": "王勃"
-                ,"email": "xianxin@layui.com"
-                ,"sex": "男"
-                ,"city": "浙江杭州"
-                ,"sign": "人生恰似一场修行"
-                ,"experience": "65"
-                ,"ip": "192.168.0.8"
-                ,"logins": "106"
-                ,"joinTime": "2016-10-14"
-            }, {
-                "id": "10004"
-                ,"username": "贤心"
-                ,"email": "xianxin@layui.com"
-                ,"sex": "男"
-                ,"city": "浙江杭州"
-                ,"sign": "人生恰似一场修行"
-                ,"experience": "666"
-                ,"ip": "192.168.0.8"
-                ,"logins": "106"
-                ,"joinTime": "2016-10-14"
-            }]
-            //,skin: 'line' //表格风格
-            ,even: true
-            //,page: true //是否显示分页
-            //,limits: [5, 7, 10]
-            //,limit: 5 //每页默认显示的数量
-        });
-    });
-</script>
 
+    WebSocketTest();
+</script>
 </body>
 </html>
