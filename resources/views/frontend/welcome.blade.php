@@ -84,11 +84,11 @@
 
 
 <script src="{{asset('/layui/layui.js')}}" charset="utf-8"></script>
+<script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 <script type="text/javascript">
     function WebSocketTest() {
         if ("WebSocket" in window) {
-            alert("您的浏览器支持 WebSocket!");
 
             // 打开一个 web socket
             var ws = new WebSocket("ws://0.0.0.0:9501");
@@ -96,12 +96,15 @@
             ws.onopen = function () {
                 // Web Socket 已连接上，使用 send() 方法发送数据
                 ws.send("发送数据");
-                console.log('发送数据');
+                // console.log($('.layui-table'));
             };
 
             ws.onmessage = function (evt) {
-                var received_msg = evt.data;
-                console.log(received_msg);
+                $data = eval('(' + evt.data + ')');
+                //更新表格
+                $('.layui-table').append(
+                    '<tr><td>' + $data.time + '</td><td>' + $data.type + '</td><td>' + $data.price + '</td><td>' + $data.number + '</td><td>' + $data.sum + '</td></tr>'
+                )
             };
 
             ws.onclose = function () {

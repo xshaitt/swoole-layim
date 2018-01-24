@@ -38,6 +38,7 @@ class SwooleStart extends Command
      */
     public function handle()
     {
-        WebSocketServer::start();
+        $websocketServer = new WebSocketServer();
+        $websocketServer->start();
     }
 }

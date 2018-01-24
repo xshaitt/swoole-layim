@@ -16,9 +16,14 @@ class TestController extends Controller
     public function send()
     {
         $host = '0.0.0.0';
-        $prot = 9501;
+        $prot = 9500;
         $client = new WebSocketClient($host, $prot);
         $data = $client->connect();
-        $client->send("这是一条客户端发送的消息");
+        $sendData['time'] = date('Y-m-d H:i:s', time());
+        $sendData['type'] = ['买', '卖'][rand(0, 1)];
+        $sendData['price'] = mt_rand(10000, 30000);
+        $sendData['number'] = mt_rand(2, 20);
+        $sendData['sum'] = $sendData['price'] * $sendData['number'];
+        $client->send(json_encode($sendData));
     }
 }
