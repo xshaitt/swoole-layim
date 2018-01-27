@@ -24,6 +24,7 @@ class TestController extends Controller
         $sendData['price'] = mt_rand(10000, 30000);
         $sendData['number'] = mt_rand(2, 20);
         $sendData['sum'] = $sendData['price'] * $sendData['number'];
-        $client->send(json_encode($sendData));
+        $result = $client->send(json_encode($sendData));
+        return json_encode($result);
     }
 }
