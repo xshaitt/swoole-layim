@@ -107,8 +107,12 @@
                 '<tr><td>' + $data.time + '</td><td>' + $data.type + '</td><td>' + $data.price + '</td><td>' + $data.number + '</td><td>' + $data.sum + '</td></tr>'
             )
         };
-        $('#sendData').on('click',function () {
-            ws.send('{"time":"2018-01-30 08:51:49","type":"\u5356","price":21031,"number":18,"sum":378558}');
+        $('#sendData').on('click', function () {
+            for (i = 0; i < 500; i++) {
+                (function () {
+                    ws.send('{"time":"2018-01-30 08:51:49","type":"\u5356","price":21031,"number":18,"sum":378558}');
+                })();
+            }
         });
 
         ws.onclose = function () {
