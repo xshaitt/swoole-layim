@@ -45,7 +45,7 @@ class WebSocketServer
 
     public function start()
     {
-        $this->server = new \swoole_websocket_server("127.0.0.1", 99, SWOOLE_BASE);
+        $this->server = new \swoole_websocket_server("106.14.114.102", 99, SWOOLE_BASE);
 //        $this->server->addlistener('127.0.0.1', 99, SWOOLE_SOCK_TCP);
         $this->server->on('open', $this->open());
         $this->server->on('message', $this->message());
