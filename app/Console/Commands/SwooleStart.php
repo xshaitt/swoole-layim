@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Swoole\Websocket\WebSocketServer;
+use App\Http\Swoole\WebSocket\WebSocketServer;
 use Illuminate\Console\Command;
 
 class SwooleStart extends Command

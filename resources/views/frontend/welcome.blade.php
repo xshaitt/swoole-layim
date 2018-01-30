@@ -91,7 +91,7 @@
         if ("WebSocket" in window) {
 
             // 打开一个 web socket
-            var ws = new WebSocket("ws://0.0.0.0:100/?token=xshaitt");
+            var ws = new WebSocket("ws://106.14.114.102:100/?token=xshaitt");
 
             ws.onopen = function () {
                 // Web Socket 已连接上，使用 send() 方法发送数据
