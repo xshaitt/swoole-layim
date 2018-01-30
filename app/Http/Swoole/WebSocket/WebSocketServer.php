@@ -48,8 +48,8 @@ class WebSocketServer
         $this->server = new \swoole_websocket_server("0.0.0.0", 9501, SWOOLE_BASE);
         $this->server->addlistener('0.0.0.0', 9500, SWOOLE_SOCK_TCP);
         $this->server->on('open', $this->open());
-        $this->server->on('message',$this->message() );
-        $this->server->on('close',$this->close() );
+        $this->server->on('message', $this->message());
+        $this->server->on('close', $this->close());
         $this->server->start();
     }
 
@@ -57,13 +57,13 @@ class WebSocketServer
     {
         return function (\swoole_websocket_server $server, $request) {
             //token不合法则断开链接
-            if(empty($request->get['token']) || $request->get['token'] != 'xshaitt'){
-                return false;
+            if (empty($request->get['token']) || $request->get['token'] != 'xshaitt') {
+                $server->close($request->fd);
             }
             $serverInfo = $server->connection_info($request->fd);
             if ($serverInfo['server_port'] == 9500) {
                 $this->fds9500[$request->fd] = $request->fd;
-            }elseif ($serverInfo['server_port'] == 9501) {
+            } elseif ($serverInfo['server_port'] == 9501) {
                 $this->fds9501[$request->fd] = $request->fd;
             }
         };
@@ -92,6 +92,8 @@ class WebSocketServer
             } elseif (in_array($fd, $this->fds9501)) {
                 unset($this->fds9501[$fd]);
                 echo '删除9501fd' . $fd;
+            } else {
+                echo '删除未验证' . $fd;
             }
         };
     }

@@ -17,7 +17,8 @@ class TestController extends Controller
     {
         $host = '0.0.0.0';
         $prot = 9500;
-        $client = new WebSocketClient($host, $prot);
+        $path = '/?token=xshaitt';
+        $client = new WebSocketClient($host, $prot, $path);
         $data = $client->connect();
         $sendData['time'] = date('Y-m-d H:i:s', time());
         $sendData['type'] = ['买', '卖'][rand(0, 1)];
