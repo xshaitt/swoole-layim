@@ -82,11 +82,14 @@
     </tbody>
 </table>
 
-
+<button id="sendData">发送消息</button>
 <script src="{{asset('/layui/layui.js')}}" charset="utf-8"></script>
 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 <script type="text/javascript">
+    // function () {
+    //
+    // }
     if ("WebSocket" in window) {
 
         // 打开一个 web socket
@@ -104,6 +107,9 @@
                 '<tr><td>' + $data.time + '</td><td>' + $data.type + '</td><td>' + $data.price + '</td><td>' + $data.number + '</td><td>' + $data.sum + '</td></tr>'
             )
         };
+        $('#sendData').on('click',function () {
+            ws.send('{"time":"2018-01-30 08:51:49","type":"\u5356","price":21031,"number":18,"sum":378558}');
+        });
 
         ws.onclose = function () {
             // 关闭 websocket
