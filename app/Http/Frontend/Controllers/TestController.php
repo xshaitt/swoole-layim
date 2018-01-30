@@ -16,7 +16,7 @@ class TestController extends Controller
     public function send()
     {
         $host = '0.0.0.0';
-        $prot = 9500;
+        $prot = 99;
         $path = '/?token=xshaitt';
         $client = new WebSocketClient($host, $prot, $path);
         $data = $client->connect();

@@ -40,13 +40,13 @@ namespace App\Http\Swoole\WebSocket;
 class WebSocketServer
 {
     public $server;
-    public $fds9500 = [];
-    public $fds9501 = [];
+    public $backendFds = [];
+    public $frontendFds = [];
 
     public function start()
     {
-        $this->server = new \swoole_websocket_server("0.0.0.0", 9501, SWOOLE_BASE);
-        $this->server->addlistener('0.0.0.0', 9500, SWOOLE_SOCK_TCP);
+        $this->server = new \swoole_websocket_server("0.0.0.0", 100, SWOOLE_BASE);
+        $this->server->addlistener('0.0.0.0', 99, SWOOLE_SOCK_TCP);
         $this->server->on('open', $this->open());
         $this->server->on('message', $this->message());
         $this->server->on('close', $this->close());
@@ -61,10 +61,10 @@ class WebSocketServer
                 $server->close($request->fd);
             }
             $serverInfo = $server->connection_info($request->fd);
-            if ($serverInfo['server_port'] == 9500) {
-                $this->fds9500[$request->fd] = $request->fd;
-            } elseif ($serverInfo['server_port'] == 9501) {
-                $this->fds9501[$request->fd] = $request->fd;
+            if ($serverInfo['server_port'] == 99) {
+                $this->backendFds[$request->fd] = $request->fd;
+            } elseif ($serverInfo['server_port'] == 100) {
+                $this->frontendFds[$request->fd] = $request->fd;
             }
         };
     }
@@ -72,10 +72,10 @@ class WebSocketServer
     public function message()
     {
         return function (\swoole_websocket_server $server, $frame) {
-            //如果是从9500商品接收到的消息则推荐给所有的9501端口
+            //如果是从99商品接收到的消息则推荐给所有的100端口
             $serverInfo = $server->connection_info($frame->fd);
-            if ($serverInfo['server_port'] == 9500) {
-                foreach ($this->fds9501 as $key => $value) {
+            if ($serverInfo['server_port'] == 99) {
+                foreach ($this->frontendFds as $key => $value) {
                     $server->push($value, $frame->data);
                 }
             }
@@ -86,12 +86,12 @@ class WebSocketServer
     {
         return function ($ser, $fd) {
             //注销对应数据里面的数据
-            if (in_array($fd, $this->fds9500)) {
-                unset($this->fds9500[$fd]);
-                echo '删除9500fd' . $fd;
-            } elseif (in_array($fd, $this->fds9501)) {
-                unset($this->fds9501[$fd]);
-                echo '删除9501fd' . $fd;
+            if (in_array($fd, $this->backendFds)) {
+                unset($this->backendFds[$fd]);
+                echo '删除99fd' . $fd;
+            } elseif (in_array($fd, $this->frontendFds)) {
+                unset($this->frontendFds[$fd]);
+                echo '删除100fd' . $fd;
             } else {
                 echo '删除未验证' . $fd;
             }
