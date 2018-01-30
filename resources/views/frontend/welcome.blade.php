@@ -90,7 +90,7 @@
     if ("WebSocket" in window) {
 
         // 打开一个 web socket
-        var ws = new WebSocket("ws://127.0.0.1:9501/?token=xshaitt");
+        var ws = new WebSocket("{{env('SWOOLE_URL_PORT')}}/?token=xshaitt");
 
         ws.onopen = function () {
             // Web Socket 已连接上，使用 send() 方法发送数据
