@@ -15,6 +15,7 @@ class TestController extends Controller
 
     public function send()
     {
+        dd('xxxxx');
         $host = '0.0.0.0';
         $prot = 9500;
         $path = '/?token=xshaitt';
