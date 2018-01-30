@@ -15,12 +15,12 @@ class TestController extends Controller
 
     public function send()
     {
-        dd('xxxxx');
-        $host = '0.0.0.0';
+        $host = '127.0.0.1';
         $prot = 9500;
         $path = '/?token=xshaitt';
         $client = new WebSocketClient($host, $prot, $path);
         $data = $client->connect();
+        dd($data);
         $sendData['time'] = date('Y-m-d H:i:s', time());
         $sendData['type'] = ['买', '卖'][rand(0, 1)];
         $sendData['price'] = mt_rand(10000, 30000);
