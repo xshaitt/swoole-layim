@@ -36,5 +36,3 @@
  */
 
 Route::get('/test', 'TestController@test');
-
-Route::get('/send', 'TestController@send');

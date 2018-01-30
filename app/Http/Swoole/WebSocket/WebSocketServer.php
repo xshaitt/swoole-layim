@@ -40,8 +40,7 @@ namespace App\Http\Swoole\WebSocket;
 class WebSocketServer
 {
     public $server;
-    public $backendFds = [];
-    public $frontendFds = [];
+    public $fds = [];
 
     public function start()
     {
@@ -60,24 +59,19 @@ class WebSocketServer
             if (empty($request->get['token']) || $request->get['token'] != 'xshaitt') {
                 $server->close($request->fd);
             }
-            $serverInfo = $server->connection_info($request->fd);
-            if ($serverInfo['server_port'] == 99) {
-                $this->backendFds[$request->fd] = $request->fd;
-            } elseif ($serverInfo['server_port'] == 100) {
-                $this->frontendFds[$request->fd] = $request->fd;
-            }
+            $this->fds[] = $request->fd;
         };
     }
 
     public function message()
     {
         return function (\swoole_websocket_server $server, $frame) {
-            //如果是从99商品接收到的消息则推荐给所有的100端口
-            $serverInfo = $server->connection_info($frame->fd);
-            if ($serverInfo['server_port'] == 99) {
-                foreach ($this->frontendFds as $key => $value) {
-                    $server->push($value, $frame->data);
+
+            foreach ($this->fds as $key => $value) {
+                if ($value == $frame->fd) {
+                    continue;
                 }
+                $server->push($value, $frame->data);
             }
         };
     }
@@ -85,16 +79,10 @@ class WebSocketServer
     public function close()
     {
         return function ($ser, $fd) {
-            //注销对应数据里面的数据
-            if (in_array($fd, $this->backendFds)) {
-                unset($this->backendFds[$fd]);
-                echo '删除99fd' . $fd;
-            } elseif (in_array($fd, $this->frontendFds)) {
-                unset($this->frontendFds[$fd]);
-                echo '删除100fd' . $fd;
-            } else {
-                echo '删除未验证' . $fd;
-            }
+            //注销fds属性里面对应的数据
+            unset($this->fds[array_search($fd, $this->fds)]);
+            echo '删除' . $fd . '\n';
+            var_dump($this->fds);
         };
     }
 }

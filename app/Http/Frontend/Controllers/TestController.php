@@ -12,21 +12,4 @@ class TestController extends Controller
     {
         return view('frontend/welcome');
     }
-
-    public function send()
-    {
-        $host = '127.0.0.1';
-        $prot = 9500;
-        $path = '/?token=xshaitt';
-        $client = new WebSocketClient($host, $prot, $path);
-        $data = $client->connect();
-        dd($data);
-        $sendData['time'] = date('Y-m-d H:i:s', time());
-        $sendData['type'] = ['买', '卖'][rand(0, 1)];
-        $sendData['price'] = mt_rand(10000, 30000);
-        $sendData['number'] = mt_rand(2, 20);
-        $sendData['sum'] = $sendData['price'] * $sendData['number'];
-        $result = $client->send(json_encode($sendData));
-        return json_encode($result);
-    }
 }

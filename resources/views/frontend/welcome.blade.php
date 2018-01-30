@@ -87,39 +87,39 @@
 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 <script type="text/javascript">
-    function WebSocketTest() {
-        if ("WebSocket" in window) {
+    if ("WebSocket" in window) {
 
-            // 打开一个 web socket
-            var ws = new WebSocket("ws://106.14.114.102:9501/?token=xshaitt");
+        // 打开一个 web socket
+        var ws = new WebSocket("ws://127.0.0.1:9501/?token=xshaitt");
 
-            ws.onopen = function () {
-                // Web Socket 已连接上，使用 send() 方法发送数据
-                ws.send("发送数据");
-                // console.log($('.layui-table'));
-            };
+        ws.onopen = function () {
+            // Web Socket 已连接上，使用 send() 方法发送数据
+            // console.log($('.layui-table'));
+        };
 
-            ws.onmessage = function (evt) {
-                $data = eval('(' + evt.data + ')');
-                //更新表格
-                $('.layui-table').append(
-                    '<tr><td>' + $data.time + '</td><td>' + $data.type + '</td><td>' + $data.price + '</td><td>' + $data.number + '</td><td>' + $data.sum + '</td></tr>'
-                )
-            };
+        ws.onmessage = function (evt) {
+            $data = eval('(' + evt.data + ')');
+            //更新表格
+            $('.layui-table').append(
+                '<tr><td>' + $data.time + '</td><td>' + $data.type + '</td><td>' + $data.price + '</td><td>' + $data.number + '</td><td>' + $data.sum + '</td></tr>'
+            )
+        };
 
-            ws.onclose = function () {
-                // 关闭 websocket
-                console.log('链接关闭')
-            };
-        }
-
-        else {
-            // 浏览器不支持 WebSocket
-            alert("您的浏览器不支持 WebSocket!");
-        }
+        ws.onclose = function () {
+            // 关闭 websocket
+            console.log('链接关闭')
+        };
     }
 
-    WebSocketTest();
+    else {
+        // 浏览器不支持 WebSocket
+        alert("您的浏览器不支持 WebSocket!");
+    }
+
+    function sendData() {
+        return '{"time":"2018-01-30 08:51:49","type":"\u5356","price":21031,"number":18,"sum":378558}';
+    }
+
 </script>
 </body>
 </html>
