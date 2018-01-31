@@ -30,7 +30,6 @@ class TestController extends Controller
             Redis::set("im:user:{$phone}:friend", json_encode($friendData));
         }
         //跳转到聊天页面
-        dd('xxx');
         return redirect(url('/api/im'));
     }
 
@@ -49,5 +48,10 @@ class TestController extends Controller
         $response['data']['mine'] = $mine;
         $response['data']['friend'] = $friend;
         return $response;
+    }
+
+    public function find()
+    {
+        return view('frontend/find');
     }
 }

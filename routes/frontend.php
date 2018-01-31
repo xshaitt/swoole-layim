@@ -43,3 +43,5 @@ Route::get('/init', 'TestController@init');
 
 Route::get('/register', 'TestController@register');
 Route::post('/register', 'TestController@createUser');
+
+Route::get('/find', 'TestController@find');

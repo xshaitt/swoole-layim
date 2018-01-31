@@ -24,7 +24,7 @@
                 url: '{{url('/api/init')}}'
             },
             title: 'IM',
-            find: '/layim/demo/find.html',
+            find: '{{url("/api/find")}}',
             isgroup: false
         });
     });
