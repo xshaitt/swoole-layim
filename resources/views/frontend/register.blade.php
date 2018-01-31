@@ -26,7 +26,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">昵称</label>
         <div class="layui-input-block">
-            <input type="text" name="nickname" placeholder="昵称" autocomplete="off" class="layui-input input-nickname"
+            <input type="text" name="username" placeholder="昵称" autocomplete="off" class="layui-input input-username"
                    lay-verify="required">
         </div>
     </div>
@@ -53,7 +53,7 @@
 
     function saveUser() {
         localStorage.imUserPhone = $('.input-phone').val();
-        localStorage.imUserNickname = $('.input-nickname').val();
+        localStorage.imUserUsername = $('.input-username').val();
         return true;
     }
 </script>

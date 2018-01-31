@@ -20,10 +20,12 @@
     layui.use('layim', function (layim) {
         //基础配置
         layim.config({
-
             init: {
                 url: '{{url('/api/init')}}'
-            }
+            },
+            title: 'IM',
+            find: '/layim/demo/find.html',
+            isgroup: false
         });
     });
 </script>
