@@ -81,7 +81,12 @@ class WebSocketServer
                 $response['data'] = $result;
                 $server->push($frame->fd, json_encode($response));
             } elseif ($data['type'] == 'add') {
-
+                $response['type'] = 'confirm';
+                $result = Redis::hgetall("im:user:{$data['my_phone']}:mine");
+                $response['data'] = $result;
+                foreach ($this->userIds[$data['other_phone']] as $key => $val) {
+                    $server->push($key, json_encode($response));
+                }
             }
         };
     }
