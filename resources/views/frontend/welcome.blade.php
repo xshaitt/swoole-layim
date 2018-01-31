@@ -87,9 +87,6 @@
 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 <script type="text/javascript">
-    // function () {
-    //
-    // }
     if ("WebSocket" in window) {
 
         // 打开一个 web socket

@@ -22,8 +22,8 @@
         layim.config({
 
             init: {
-                url: '{{url('/api/init')}}' //接口地址（返回的数据格式见下文）
-            } //获取主面板列表信息，下文会做进一步介绍
+                url: '{{url('/api/init')}}'
+            }
         });
     });
 </script>

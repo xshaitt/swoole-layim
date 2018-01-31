@@ -41,6 +41,10 @@
 <script src="{{asset('/layui/layui.js')}}"></script>
 <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 <script>
+    //如果本地已经登录则直接登录到聊天页
+    if (localStorage.imUserPhone !== undefined) {
+        location.href = "{{url('/api/im')}}";
+    }
     layui.use('form', function () {
         var form = layui.form;
 
