@@ -41,4 +41,5 @@ Route::get('/im', 'TestController@im');
 
 Route::get('/init', 'TestController@init');
 
-Route::get('/login', 'TestController@login');
+Route::get('/register', 'TestController@register');
+Route::post('/register', 'TestController@createUser');

@@ -5,6 +5,7 @@ namespace App\Http\Frontend\Controllers;
 use App\Http\Swoole\Websocket\WebSocketClient;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Redis;
 
 class TestController extends Controller
 {
@@ -13,9 +14,20 @@ class TestController extends Controller
         return view('frontend/welcome');
     }
 
-    public function login()
+    public function register()
     {
-        return view('frontend/login');
+        return view('frontend/register');
+    }
+
+    public function createUser(Request $request)
+    {
+        $phone = $request->input('phone', '');
+        $nickname = $request->input('nickname', '');
+        if (!Redis::exists("im:user:{$phone}")) {
+            $result = Redis::hset("im:user:{$phone}", 'phone', $phone, 'nickname', $nickname);
+        }
+        //跳转到聊天页面
+        return redirect(url('/api/im'));
     }
 
     public function im()

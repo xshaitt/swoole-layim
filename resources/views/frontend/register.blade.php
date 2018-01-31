@@ -15,18 +15,19 @@
 </head>
 <h1>创建用户开始聊天吧</h1>
 <body>
-<form class="layui-form"> <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
+<form class="layui-form" method="post"> <!-- 提示：如果你不想用form，你可以换成div等任何一个普通元素 -->
     <div class="layui-form-item">
         <label class="layui-form-label">手机号</label>
         <div class="layui-input-block">
-            <input type="text" name="" placeholder="手机号" autocomplete="off" class="layui-input"
+            <input type="text" name="phone" placeholder="手机号" autocomplete="off" class="layui-input"
                    lay-verify="required|phone|number">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">昵称</label>
         <div class="layui-input-block">
-            <input type="text" name="" placeholder="昵称" autocomplete="off" class="layui-input" lay-verify="required">
+            <input type="text" name="nickname" placeholder="昵称" autocomplete="off" class="layui-input"
+                   lay-verify="required">
         </div>
     </div>
     <div class="layui-form-item">
