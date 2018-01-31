@@ -132,7 +132,7 @@
     }
     //查找用户
     $('.search').click(function () {
-        ws.send('{"type":"find","phone":"' + $('.phone') + '"}');
+        ws.send('{"type":"find","phone":"' + $('.phone').val() + '"}');
     })
 
 </script>

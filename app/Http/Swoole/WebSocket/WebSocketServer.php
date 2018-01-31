@@ -37,6 +37,8 @@
 
 namespace App\Http\Swoole\WebSocket;
 
+use Illuminate\Support\Facades\Redis;
+
 class WebSocketServer
 {
     public $server;
@@ -65,12 +67,16 @@ class WebSocketServer
     public function message()
     {
         return function (\swoole_websocket_server $server, $frame) {
-
-            foreach ($this->fds as $key => $value) {
-                if ($value == $frame->fd) {
-                    continue;
+            $data = json_decode($frame->data, true);
+            if ($data['type'] == 'find') {
+                $keys = Redis::keys("im:user:*{$data['phone']}*:mine");
+                $result = [];
+                foreach ($keys as $key) {
+                    $result[] = Redis::hgetall($key);
                 }
-                $server->push($value, $frame->data);
+                $response['type'] = 'find';
+                $response['data'] = $result;
+                $server->push($frame->fd, json_encode($response));
             }
         };
     }
