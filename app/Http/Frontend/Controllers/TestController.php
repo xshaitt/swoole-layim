@@ -13,6 +13,11 @@ class TestController extends Controller
         return view('frontend/welcome');
     }
 
+    public function login()
+    {
+        return view('frontend/login');
+    }
+
     public function im()
     {
         return view('frontend/im');
