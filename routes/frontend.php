@@ -36,3 +36,7 @@
  */
 
 Route::get('/test', 'TestController@test');
+
+Route::get('/im', 'TestController@im');
+
+Route::get('/init', 'TestController@init');
