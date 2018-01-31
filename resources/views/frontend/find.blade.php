@@ -77,19 +77,19 @@
 <div class='container'>
     <input type='text' class="phone"/>
     <button class="search">搜索</button>
-    <ul>
-        <li>
-            <div>
-                <img src="http://kibey-sys-avatar.b0.upaiyun.com/01ba2ac493978fea02ab4ecbbee1b578.jpg" alt="">
-            </div>
-            <div>saasssdcds</div>
-        </li>
-        <li>
-            <div>
-                <img src="" alt="">
-            </div>
-            <div>saasssdcds</div>
-        </li>
+    <ul class="find-list">
+        {{--<li>--}}
+        {{--<div>--}}
+        {{--<img src="http://kibey-sys-avatar.b0.upaiyun.com/01ba2ac493978fea02ab4ecbbee1b578.jpg" alt="">--}}
+        {{--</div>--}}
+        {{--<div>saasssdcds</div>--}}
+        {{--</li>--}}
+        {{--<li>--}}
+        {{--<div>--}}
+        {{--<img src="" alt="">--}}
+        {{--</div>--}}
+        {{--<div>saasssdcds</div>--}}
+        {{--</li>--}}
     </ul>
 </div>
 </body>
@@ -98,7 +98,7 @@
     if ("WebSocket" in window) {
 
         // 打开一个 web socket
-        var ws = new WebSocket("{{env('SWOOLE_URL_PORT')}}/?token=xshaitt");
+        var ws = new WebSocket("{{env('SWOOLE_URL_PORT')}}/?token=xshaitt&phone=" + localStorage.imUserPhone);
 
         ws.onopen = function () {
             // Web Socket 已连接上，使用 send() 方法发送数据
@@ -106,19 +106,20 @@
         };
 
         ws.onmessage = function (evt) {
-            $data = eval('(' + evt.data + ')');
-            //更新表格
-            $('.layui-table').append(
-                '<tr><td>' + $data.time + '</td><td>' + $data.type + '</td><td>' + $data.price + '</td><td>' + $data.number + '</td><td>' + $data.sum + '</td></tr>'
-            )
-        };
-        $('#sendData').on('click', function () {
-            for (i = 0; i < 500; i++) {
-                (function () {
-                    ws.send('{"time":"2018-01-30 08:51:49","type":"\u5356","price":21031,"number":18,"sum":378558}');
-                })();
+            var data = eval('(' + evt.data + ')');
+            if (data.type == 'find' && data.data.length > 0) {
+                //查找用户
+                $('.find-list').html('');
+                for (var i = 0; i < data.data.length; i++) {
+                    $('.find-list').append('<li>\n' +
+                        '            <div>\n' +
+                        '                <img src="' + data.data[i].avatar + '" alt="">\n' +
+                        '            </div>\n' +
+                        '            <div>' + data.data[i].username + '</div><button phone="' + data.data[i].id + '" class="add-user">添加</button>\n' +
+                        '        </li>')
+                }
             }
-        });
+        };
 
         ws.onclose = function () {
             // 关闭 websocket
@@ -133,6 +134,10 @@
     //查找用户
     $('.search').click(function () {
         ws.send('{"type":"find","phone":"' + $('.phone').val() + '"}');
+    })
+
+    $('.find-list').on('click', '.add-user', function (e) {
+        ws.send('{"type":"add","other_phone":"' + $(this).attr('phone') + '","my_phone":' + localStorage.imUserPhone + '}');
     })
 
 </script>

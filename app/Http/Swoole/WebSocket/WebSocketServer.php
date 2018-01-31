@@ -43,6 +43,7 @@ class WebSocketServer
 {
     public $server;
     public $fds = [];
+    public $userIds = [];
 
     public function start()
     {
@@ -60,7 +61,9 @@ class WebSocketServer
             if (empty($request->get['token']) || $request->get['token'] != 'xshaitt') {
                 $server->close($request->fd);
             }
-            $this->fds[] = $request->fd;
+            $this->fds[$request->fd] = $request->get['phone'];
+            $this->userIds[$request->get['phone']][$request->fd] = $request->fd;
+            var_dump($this->userIds);
         };
     }
 
@@ -77,6 +80,8 @@ class WebSocketServer
                 $response['type'] = 'find';
                 $response['data'] = $result;
                 $server->push($frame->fd, json_encode($response));
+            } elseif ($data['type'] == 'add') {
+
             }
         };
     }
@@ -85,9 +90,13 @@ class WebSocketServer
     {
         return function ($ser, $fd) {
             //注销fds属性里面对应的数据
-            unset($this->fds[array_search($fd, $this->fds)]);
-            echo '删除' . $fd . '\n';
-            var_dump($this->fds);
+            $userId = $this->fds[$fd];
+            unset($this->userIds[$userId][$fd]);
+            unset($this->fds[$fd]);
+            if (count($this->userIds[$userId]) < 1) {
+                unset($this->userIds[$userId]);
+            }
+            var_dump($this->userIds);
         };
     }
 }
