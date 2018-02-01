@@ -21,7 +21,7 @@
         //基础配置
         layim.config({
             init: {
-                url: '{{url('/api/init')}}'
+                url: '{{url('/api/init')}}?phone=' + localStorage.imUserPhone
             },
             title: 'IM',
             find: '{{url("/api/find")}}',
@@ -62,6 +62,8 @@
                 });
             } else if (data.type === 'ok') {
                 layim.addList(data.user);
+            } else if (data.type === 'message') {
+                layim.getMessage(data.data);
             }
         };
 

@@ -125,8 +125,22 @@ class WebSocketServer
                 foreach ($this->userIds[$sourcePhone] as $key => $val) {
                     $server->push($key, json_encode($response));
                 }
-            }else{
-                var_dump($frame);
+            } elseif ($data['type'] == 'message') {
+                //监听到消息
+                $targetPhone = $data['data']['to']['id'];
+                $response['type'] = 'message';
+                $response['data']['username'] = $data['data']['mine']['username'];
+                $response['data']['avatar'] = $data['data']['mine']['avatar'];
+                $response['data']['id'] = $data['data']['mine']['id'];
+                $response['data']['type'] = $data['data']['to']['type'];
+                $response['data']['content'] = $data['data']['mine']['content'];
+//                $response['data']['username'] = $data['data']['mine']['username'];
+                $response['data']['mine'] = false;
+                $response['data']['fromid'] = $data['data']['mine']['id'];
+                $response['data']['timestamp'] = time() * 1000;
+                foreach ($this->userIds[$targetPhone] as $key => $val) {
+                    $server->push($key, json_encode($response));
+                }
             }
         };
     }
@@ -135,7 +149,7 @@ class WebSocketServer
     {
         return function ($ser, $fd) {
             //注销fds属性里面对应的数据
-            $userId = $this->fds[$fd];
+            $userId = @$this->fds[$fd];
             unset($this->userIds[$userId][$fd]);
             unset($this->fds[$fd]);
             if (count($this->userIds[$userId]) < 1) {
