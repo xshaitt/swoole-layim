@@ -81,12 +81,52 @@ class WebSocketServer
                 $response['data'] = $result;
                 $server->push($frame->fd, json_encode($response));
             } elseif ($data['type'] == 'add') {
-                $response['type'] = 'confirm';
-                $result = Redis::hgetall("im:user:{$data['my_phone']}:mine");
+                $response['type'] = 'add';
+                $result = Redis::hgetall("im:user:{$data['other_phone']}:mine");
                 $response['data'] = $result;
-                foreach ($this->userIds[$data['other_phone']] as $key => $val) {
+                foreach ($this->userIds[$data['my_phone']] as $key => $val) {
                     $server->push($key, json_encode($response));
                 }
+            } elseif ($data['type'] == 'confirm') {
+                $response['type'] = 'confirm';
+                $targetPhone = $data['target_phone'];
+                $sourcePhone = $this->fds[$frame->fd];
+                $remark = $data['remark'];
+                $response['target_phone'] = $targetPhone;
+                $response['source_phone'] = $sourcePhone;
+                $response['remark'] = $remark;
+                $response['source_user'] = Redis::hgetall("im:user:{$sourcePhone}:mine");
+                foreach ($this->userIds[$targetPhone] as $key => $val) {
+                    $server->push($key, json_encode($response));
+                }
+            } elseif ($data['type'] == 'ok') {
+                //建立好友关系
+                $targetPhone = $data['target_phone'];
+                $sourcePhone = $data['source_phone'];
+                $targetFriend = json_decode(Redis::get("im:user:{$targetPhone}:friend"), true);
+                $sourceFriend = json_decode(Redis::get("im:user:{$sourcePhone}:friend"), true);
+                $targetUser = Redis::hgetall("im:user:{$targetPhone}:mine");
+                $sourceUser = Redis::hgetall("im:user:{$sourcePhone}:mine");
+                $targetFriend[0]['list'][] = $sourceUser;
+                $sourceFriend[0]['list'][] = $targetUser;
+                Redis::set("im:user:{$targetPhone}:friend", json_encode($targetFriend));
+                Redis::set("im:user:{$sourcePhone}:friend", json_encode($sourceFriend));
+                //发送添加好友到面板通知
+                $response['type'] = 'ok';
+                $targetUser['type'] = 'friend';
+                $targetUser['groupid'] = 0;
+                $sourceUser['type'] = 'friend';
+                $sourceUser['groupid'] = 0;
+                $response['user'] = $sourceUser;
+                foreach ($this->userIds[$targetPhone] as $key => $val) {
+                    $server->push($key, json_encode($response));
+                }
+                $response['user'] = $targetUser;
+                foreach ($this->userIds[$sourcePhone] as $key => $val) {
+                    $server->push($key, json_encode($response));
+                }
+            }else{
+                var_dump($frame);
             }
         };
     }
